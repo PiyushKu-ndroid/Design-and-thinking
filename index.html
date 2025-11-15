@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Campus Lost & Found</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-poppins bg-gray-50 text-gray-900">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md hidden md:block">
+      <div class="p-6">
+        <h1 class="text-2xl font-semibold text-indigo-600">Campus <span class="text-yellow-400">Lost&Found</span></h1>
+        <p class="text-sm mt-1 text-gray-500">Manage & reclaim lost things</p>
+      </div>
+      <nav class="mt-6 px-4">
+        <a class="block py-3 px-4 rounded-lg hover:bg-indigo-50 active" href="#dashboard">Dashboard</a>
+        <a class="block py-3 px-4 rounded-lg hover:bg-indigo-50" href="#reports">Browse Reports</a>
+        <a class="block py-3 px-4 rounded-lg hover:bg-indigo-50" href="#submit">Report Item</a>
+        <a class="block py-3 px-4 rounded-lg hover:bg-indigo-50" href="#myreports">My Reports</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1">
+      <!-- Topbar -->
+      <header class="flex items-center justify-between p-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm">
+        <div class="flex items-center gap-4">
+          <button id="menuBtn" class="md:hidden p-2 rounded-md hover:bg-white/10">☰</button>
+          <div>
+            <h2 class="text-lg font-semibold">Campus Lost & Found</h2>
+            <p class="text-sm opacity-90">Find & reunite lost items quickly</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="googleSignBtn" class="flex items-center gap-2 bg-white text-indigo-600 px-4 py-2 rounded-lg shadow hover:scale-105 transition transform"> 
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.35 11.1H12v2.8h5.37c-.23 1.4-.96 2.6-2.04 3.4v2.8h3.3c1.93-1.77 3.04-4.42 3.04-7.2 0-.62-.06-1.22-.12-1.8z" fill="#4285F4"/><path d="M12 22c2.7 0 4.97-.9 6.63-2.43l-3.3-2.8c-.9.6-2.06.96-3.33.96-2.56 0-4.73-1.72-5.5-4.03H3.02v2.53C4.6 19.85 8.02 22 12 22z" fill="#34A853"/><path d="M6.5 13.7a6.99 6.99 0 010-4.4V6.77H3.02A9.99 9.99 0 002 12c0 1.6.36 3.1 1.02 4.45L6.5 13.7z" fill="#FBBC05"/><path d="M12 6.2c1.47 0 2.8.5 3.84 1.48l2.88-2.9C16.95 2.93 14.7 2 12 2 8.02 2 4.6 4.15 3.02 6.77l3.48 2.53C7.27 7.92 9.44 6.2 12 6.2z" fill="#EA4335"/></svg>
+            <span id="googleBtnText">Sign in with Google</span>
+          </button>
+
+          <button id="adminBtn" class="bg-white text-indigo-600 px-3 py-2 rounded-lg shadow" onclick="window.location.href='admin.html'">Admin</button>
+
+          <div id="userPreview" class="hidden items-center gap-3 bg-white/10 px-3 py-1 rounded-lg">
+            <div id="avatar" class="w-9 h-9 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-semibold"></div>
+            <div class="text-sm" id="userNameDisp"></div>
+            <button id="logoutBtn" class="ml-2 text-sm bg-white text-indigo-600 px-2 py-1 rounded">Logout</button>
+          </div>
+        </div>
+      </header>
+
+      <main class="p-6">
+        <!-- Dashboard top cards -->
+        <section id="dashboard" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card animate-float">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="text-sm text-gray-500">Total Reports</h4>
+                <h3 id="totalCount" class="text-2xl font-bold">0</h3>
+              </div>
+              <div class="text-3xl">📋</div>
+            </div>
+            <p class="mt-3 text-sm text-gray-600">All lost & found reports</p>
+          </div>
+
+          <div class="card animate-float">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="text-sm text-gray-500">Active (Unclaimed)</h4>
+                <h3 id="activeCount" class="text-2xl font-bold">0</h3>
+              </div>
+              <div class="text-3xl">🔍</div>
+            </div>
+            <p class="mt-3 text-sm text-gray-600">Items still waiting to be claimed</p>
+          </div>
+
+          <div class="card animate-float">
+            <div class="flex justify-between items-start">
+              <div>
+                <h4 class="text-sm text-gray-500">Resolved</h4>
+                <h3 id="resolvedCount" class="text-2xl font-bold">0</h3>
+              </div>
+              <div class="text-3xl">✅</div>
+            </div>
+            <p class="mt-3 text-sm text-gray-600">Items marked as returned</p>
+          </div>
+        </section>
+
+        <!-- Reports & Submit -->
+        <section class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Recent reports -->
+          <div class="col-span-2 bg-white p-4 rounded-xl shadow">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-semibold">Recent Activity</h3>
+              <div class="flex gap-2">
+                <select id="filter" class="border rounded px-2 py-1">
+                  <option value="All">All</option>
+                  <option value="Lost">Lost</option>
+                  <option value="Found">Found</option>
+                </select>
+                <input id="search" placeholder="Search name or place" class="border rounded px-2 py-1" />
+              </div>
+            </div>
+            <div id="recentList" class="space-y-3 max-h-96 overflow-auto"></div>
+          </div>
+
+          <!-- Submit form -->
+          <div id="submit" class="bg-white p-4 rounded-xl shadow">
+            <h3 class="font-semibold mb-3">Report an Item</h3>
+            <form id="itemForm" autocomplete="off">
+              <label class="text-sm">Type</label>
+              <select id="type" class="w-full border rounded px-2 py-1 mb-2" required>
+                <option value="">Select</option>
+                <option value="Lost">Lost</option>
+                <option value="Found">Found</option>
+              </select>
+
+              <label class="text-sm">Item name</label>
+              <input id="name" class="w-full border rounded px-2 py-1 mb-2" placeholder="e.g. Black Wallet" autocomplete="off" required />
+
+              <label class="text-sm">Description</label>
+              <textarea id="description" class="w-full border rounded px-2 py-1 mb-2" rows="3" placeholder="Short description..." required></textarea>
+
+              <label class="text-sm">Place</label>
+              <input id="place" class="w-full border rounded px-2 py-1 mb-2" placeholder="e.g. Library" autocomplete="off" required />
+
+              <label class="text-sm">Contact</label>
+              <input id="contact" class="w-full border rounded px-2 py-1 mb-3" placeholder="Phone or email" autocomplete="off" required />
+
+              <div class="flex gap-2">
+                <button type="submit" class="btn-primary flex-1">Submit</button>
+                <button type="button" id="previewBtn" class="btn-ghost">Preview</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- My reports -->
+        <section id="myreports" class="mt-8 bg-white p-4 rounded-xl shadow">
+          <h3 class="font-semibold mb-4">My Reports</h3>
+          <div id="myReportsList" class="space-y-3"></div>
+        </section>
+
+      </main>
+
+      <footer class="p-4 text-center text-sm text-gray-500">© 2025 Campus Lost & Found</footer>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div id="previewModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg p-4 w-11/12 md:w-2/5">
+      <h3 class="font-semibold mb-2">Preview Report</h3>
+      <div id="previewContent" class="text-sm text-gray-700"></div>
+      <div class="mt-4 text-right">
+        <button id="closePreview" class="btn-ghost mr-2">Close</button>
+        <button id="confirmSubmit" class="btn-primary">Confirm & Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mock Google Sign Modal -->
+  <div id="googleModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-11/12 sm:w-96">
+      <h3 class="font-semibold">Mock Google Sign In</h3>
+      <p class="text-sm text-gray-500">(Local demo mode) Enter name & email to sign in as a Google user.</p>
+      <div class="mt-4 space-y-2">
+        <input id="mockName" placeholder="Full name" class="w-full border rounded px-2 py-1" />
+        <input id="mockEmail" placeholder="Email" class="w-full border rounded px-2 py-1" />
+      </div>
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="googleCancel" class="btn-ghost">Cancel</button>
+        <button id="googleConfirm" class="btn-primary">Sign in</button>
+      </div>
+    </div>
+  </div>
+
+
+<script type="module">
+  // Firebase SDKs
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } 
+    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+  // Your firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyAk53a-aYyEZDLrR6GQoKGj25xEJ86WNyc",
+    authDomain: "lostandfound-fb851.firebaseapp.com",
+    projectId: "lostandfound-fb851",
+    storageBucket: "lostandfound-fb851.firebasestorage.app",
+    messagingSenderId: "625034416716",
+    appId: "1:625034416716:web:31fa54187c5621dce79ae9"
+  };
+
+  // Initialize
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // Google Login Button
+  document.getElementById("googleSignBtn").addEventListener("click", () => {
+    signInWithPopup(auth, provider)
+      .then(result => {
+        const user = result.user;
+        document.getElementById("userNameDisp").textContent = user.displayName;
+        document.getElementById("avatar").textContent = user.displayName[0].toUpperCase();
+
+        document.getElementById("googleSignBtn").classList.add("hidden");
+        document.getElementById("userPreview").classList.remove("hidden");
+      })
+      .catch(err => alert(err.message));
+  });
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    signOut(auth).then(() => {
+      document.getElementById("googleSignBtn").classList.remove("hidden");
+      document.getElementById("userPreview").classList.add("hidden");
+    });
+  });
+</script>
+
+  <script src="script.js"></script>
+</body>
+</html>
