@@ -162,30 +162,17 @@
     </div>
   </div>
 
-  <!-- Mock Google Sign Modal -->
-  <div id="googleModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
-    <div class="bg-white rounded-lg p-6 w-11/12 sm:w-96">
-      <h3 class="font-semibold">Mock Google Sign In</h3>
-      <p class="text-sm text-gray-500">(Local demo mode) Enter name & email to sign in as a Google user.</p>
-      <div class="mt-4 space-y-2">
-        <input id="mockName" placeholder="Full name" class="w-full border rounded px-2 py-1" />
-        <input id="mockEmail" placeholder="Email" class="w-full border rounded px-2 py-1" />
-      </div>
-      <div class="mt-4 flex justify-end gap-2">
-        <button id="googleCancel" class="btn-ghost">Cancel</button>
-        <button id="googleConfirm" class="btn-primary">Sign in</button>
-      </div>
-    </div>
-  </div>
-
-
 <script type="module">
-  // Firebase SDKs
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } 
-    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { 
+    getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-  // Your firebase config
+  import { 
+    getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where 
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyAk53a-aYyEZDLrR6GQoKGj25xEJ86WNyc",
     authDomain: "lostandfound-fb851.firebaseapp.com",
@@ -195,34 +182,32 @@
     appId: "1:625034416716:web:31fa54187c5621dce79ae9"
   };
 
-  // Initialize
+  // Init Firebase
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const db = getFirestore(app);
 
-  // Google Login Button
-  document.getElementById("googleSignBtn").addEventListener("click", () => {
-    signInWithPopup(auth, provider)
-      .then(result => {
-        const user = result.user;
-        document.getElementById("userNameDisp").textContent = user.displayName;
-        document.getElementById("avatar").textContent = user.displayName[0].toUpperCase();
+  // Expose to window so script.js can use them
+  window.auth = auth;
+  window.provider = provider;
+  window.db = db;
 
-        document.getElementById("googleSignBtn").classList.add("hidden");
-        document.getElementById("userPreview").classList.remove("hidden");
-      })
-      .catch(err => alert(err.message));
-  });
+  window.signInWithPopup = signInWithPopup;
+  window.signOut = signOut;
+  window.onAuthStateChanged = onAuthStateChanged;
 
-  // Logout
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    signOut(auth).then(() => {
-      document.getElementById("googleSignBtn").classList.remove("hidden");
-      document.getElementById("userPreview").classList.add("hidden");
-    });
-  });
+  window.collection = collection;
+  window.addDoc = addDoc;
+  window.getDocs = getDocs;
+  window.updateDoc = updateDoc;
+  window.deleteDoc = deleteDoc;
+  window.doc = doc;
+  window.query = query;
+  window.where = where;
 </script>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+
 </body>
 </html>
