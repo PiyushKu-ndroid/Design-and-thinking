@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="font-poppins bg-gray-50">
   <div class="min-h-screen">
     <header class="flex items-center justify-between p-4 bg-indigo-600 text-white">
@@ -15,12 +16,11 @@
         <h2 class="text-lg font-semibold">Admin Panel</h2>
         <p class="text-sm opacity-90">Manage reports & claims</p>
       </div>
+
       <div class="flex items-center gap-4">
-        <div id="adminUserPreview" class="hidden items-center gap-2">
-          <div id="adminAvatar" class="w-9 h-9 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-semibold">AD</div>
-          <div id="adminNameDisp" class="text-sm">Admin</div>
-        </div>
-        <button id="adminLogoutBtn" class="bg-white text-indigo-600 px-3 py-2 rounded" onclick="logoutAdmin()">Logout</button>
+        <button id="adminLogoutBtn" class="bg-white text-indigo-600 px-3 py-2 rounded" onclick="logoutAdmin()">
+          Logout
+        </button>
       </div>
     </header>
 
@@ -56,6 +56,54 @@
     <footer class="p-4 text-sm text-gray-500 text-center">© 2025 Campus Lost & Found</footer>
   </div>
 
-  <script src="script.js"></script>
+
+  <!-- FIREBASE IMPORTS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAk53a-aYyEZDLrR6GQoKGj25xEJ86WNyc",
+      authDomain: "lostandfound-fb851.firebaseapp.com",
+      projectId: "lostandfound-fb851",
+      storageBucket: "lostandfound-fb851.firebasestorage.app",
+      messagingSenderId: "625034416716",
+      appId: "1:625034416716:web:31fa54187c5621dce79ae9"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Expose Firebase to script.js
+    window.auth = auth;
+    window.db = db;
+
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.getDocs = getDocs;
+    window.updateDoc = updateDoc;
+    window.deleteDoc = deleteDoc;
+    window.doc = doc;
+    window.query = query;
+    window.where = where;
+  </script>
+
+
+  <!-- FIXED ADMIN LOGOUT -->
+  <script>
+    function logoutAdmin() {
+      localStorage.removeItem("adminLoggedIn");
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <!-- MAIN APP LOGIC -->
+  <script type="module" src="script.js"></script>
+
 </body>
 </html>
