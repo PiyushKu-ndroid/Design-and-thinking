@@ -145,18 +145,29 @@
               <div class="flex gap-2 items-center">
                 <button type="submit" class="btn-primary flex-1">Submit</button>
 
-                <!-- Upload Image Button + Preview -->
+              <!-- Upload Image Button + Preview -->
 <div class="flex flex-col gap-2 mt-2">
   
-  <label class="btn-ghost cursor-pointer w-fit">
-    Upload Image
-    <input type="file" id="itemImage" accept="image/*" class="hidden">
-  </label>
+  <input 
+    type="file" 
+    id="itemImage" 
+    accept="image/*" 
+    class="hidden"
+  >
 
-  <!-- Image Preview Box -->
+  <button 
+    type="button" 
+    id="imageBtn"
+    class="btn-ghost w-fit"
+  >
+    Upload Image
+  </button>
+   <!-- Image Preview Box -->
   <img id="imagePreview" class="hidden w-32 h-32 object-cover rounded border" />
 
 </div>
+
+ 
 
               </div>
             </form>
@@ -248,4 +259,3 @@
 
 </body>
 </html>
-
