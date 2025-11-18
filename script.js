@@ -45,6 +45,13 @@ function setupUserPage() {
 let uploadedImageFile = null;
 const imageInput = document.getElementById("itemImage");
 const imagePreview = document.getElementById("imagePreview");
+  // Make Upload Image button open file picker
+const imageBtn = document.getElementById("imageBtn");
+imageBtn?.addEventListener("click", () => {
+  imageInput.click();
+});
+//added broken image preview handling
+
 
 imageInput?.addEventListener("change", e => {
   uploadedImageFile = e.target.files[0] || null;
@@ -377,3 +384,4 @@ function setupAdminPage() {
     localStorage.setItem("adminLoggedIn", "true");
   }
 }
+
