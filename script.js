@@ -468,19 +468,31 @@ function setupAdminPage() {
 
       // Display claim/verification status clearly in admin panel
       let statusInfo = '';
-      if (r.status === 'Pending Verification' && r.claimerName) {
+     if (r.status === 'Pending Verification' && r.claimerName) {
     statusInfo = `
         <p class="text-xs text-yellow-600 font-semibold mt-1">🟡 PENDING CLAIM by ${escapeHtml(r.claimerName)}</p>
+        
+        <p class="text-xs italic text-gray-500">Color: ${escapeHtml(r.verificationAnswers?.color || 'N/A')}</p>
+        <p class="text-xs italic text-gray-500">Marking: ${escapeHtml(r.verificationAnswers?.marking || 'N/A')}</p>
+        <p class="text-xs italic text-gray-500">Contents: ${escapeHtml(r.verificationAnswers?.contents || 'N/A')}</p>
     `;
 }
 else if (r.status === "Verified" && !r.resolved) {
     statusInfo = `
         <p class="text-xs text-blue-600 font-semibold mt-1">🔵 VERIFIED (Awaiting Handover)</p>
+
+        <p class="text-xs italic text-gray-500">Color: ${escapeHtml(r.verificationAnswers?.color || 'N/A')}</p>
+        <p class="text-xs italic text-gray-500">Marking: ${escapeHtml(r.verificationAnswers?.marking || 'N/A')}</p>
+        <p class="text-xs italic text-gray-500">Contents: ${escapeHtml(r.verificationAnswers?.contents || 'N/A')}</p>
     `;
 }
 else if (r.resolved) {
     statusInfo = `
         <p class="text-xs text-green-600 font-semibold mt-1">🟢 RESOLVED / RETURNED</p>
+
+        <p class="text-xs italic text-gray-500">Color: ${escapeHtml(r.verificationAnswers?.color || 'N/A')}</p>
+        <p class="text-xs italic text-gray-500">Marking: ${escapeHtml(r.verificationAnswers?.marking || 'N/A')}</p>
+        <p class="text-xs italic text-gray-500">Contents: ${escapeHtml(r.verificationAnswers?.contents || 'N/A')}</p>
     `;
 }
 else {
