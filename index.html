@@ -155,15 +155,15 @@
     class="hidden"
   >
 
-  <button 
+  <!-- <button 
     type="button" 
     id="imageBtn"
     class="btn-ghost w-fit"
   >
     Upload Image
   </button>
-   <!-- Image Preview Box -->
-  <img id="imagePreview" class="hidden w-32 h-32 object-cover rounded border" />
+    Image Preview Box -->
+  <!-- <img id="imagePreview" class="hidden w-32 h-32 object-cover rounded border" /> --> 
 
 </div>
 
@@ -197,7 +197,48 @@
       </div>
     </div>
   </div>
+  
+  <!-- Claim Verification Modal -->
+<div id="claimModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[1001]">
+    <div class="bg-white rounded-lg p-6 w-11/12 md:w-1/3 shadow-2xl transform transition-all duration-300 scale-100">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-indigo-600">Verify Ownership to Claim</h3>
+            <button id="closeClaimModal" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+        </div>
+        <p class="text-sm mb-4 text-gray-600">
+            Please answer the following unique questions about the item. Your answers will be sent to the finder for verification.
+        </p>
 
+        <form id="claimForm" autocomplete="off">
+            <input type="hidden" id="reportIdToClaim">
+            <input type="hidden" id="finderUidToClaim">
+
+            <div class="space-y-4">
+                <div class="form-group">
+                    <label for="verificationColor" class="text-sm font-medium text-gray-700 block mb-1">1. What was the **primary color** of the item?</label>
+                    <input type="text" id="verificationColor" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="verificationMarking" class="text-sm font-medium text-gray-700 block mb-1">2. What is the **unique mark or inscription** (if any)?</label>
+                    <input type="text" id="verificationMarking" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. 'J.D.' written inside" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="verificationContents" class="text-sm font-medium text-gray-700 block mb-1">3. What was **inside** the item, or its last known setting?</label>
+                    <input type="text" id="verificationContents" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. 3 IDs, a $5 bill, screen wallpaper" required>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition duration-150">
+                    Submit Verification Details
+                </button>
+            </div>
+            <p id="claimMessage" class="text-center mt-3 text-sm font-medium"></p>
+        </form>
+    </div>
+</div>
   <!-- FIREBASE SETUP -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
