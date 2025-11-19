@@ -30,7 +30,8 @@
     <!-- Main -->
     <div class="flex-1">
       <!-- Topbar -->
-      <header class="flex items-center justify-between p-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm">
+      <header
+        class="flex items-center justify-between p-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white shadow-sm">
         <div class="flex items-center gap-4">
           <button id="menuBtn" class="md:hidden p-2 rounded-md hover:bg-white/10">☰</button>
           <div>
@@ -41,12 +42,18 @@
         <div class="flex items-center gap-3">
           <button id="googleSignBtn"
             class="flex items-center gap-2 bg-white text-indigo-600 px-4 py-2 rounded-lg shadow hover:scale-105 transition transform">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <path d="M21.35 11.1H12v2.8h5.37c-.23 1.4-.96 2.6-2.04 3.4v2.8h3.3c1.93-1.77 3.04-4.42 3.04-7.2 0-.62-.06-1.22-.12-1.8z" fill="#4285F4"/>
-              <path d="M12 22c2.7 0 4.97-.9 6.63-2.43l-3.3-2.8c-.9.6-2.06.96-3.33.96-2.56 0-4.73-1.72-5.5-4.03H3.02v2.53C4.6 19.85 8.02 22 12 22z" fill="#34A853"/>
-              <path d="M6.5 13.7a6.99 6.99 0 010-4.4V6.77H3.02A9.99 9.99 0 002 12c0 1.6.36 3.1 1.02 4.45L6.5 13.7z" fill="#FBBC05"/>
-              <path d="M12 6.2c1.47 0 2.8.5 3.84 1.48l2.88-2.9C16.95 2.93 14.7 2 12 2 8.02 2 4.6 4.15 3.02 6.77l3.48 2.53C7.27 7.92 9.44 6.2 12 6.2z" fill="#EA4335"/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M21.35 11.1H12v2.8h5.37c-.23 1.4-.96 2.6-2.04 3.4v2.8h3.3c1.93-1.77 3.04-4.42 3.04-7.2 0-.62-.06-1.22-.12-1.8z"
+                fill="#4285F4" />
+              <path
+                d="M12 22c2.7 0 4.97-.9 6.63-2.43l-3.3-2.8c-.9.6-2.06.96-3.33.96-2.56 0-4.73-1.72-5.5-4.03H3.02v2.53C4.6 19.85 8.02 22 12 22z"
+                fill="#34A853" />
+              <path d="M6.5 13.7a6.99 6.99 0 010-4.4V6.77H3.02A9.99 9.99 0 002 12c0 1.6.36 3.1 1.02 4.45L6.5 13.7z"
+                fill="#FBBC05" />
+              <path
+                d="M12 6.2c1.47 0 2.8.5 3.84 1.48l2.88-2.9C16.95 2.93 14.7 2 12 2 8.02 2 4.6 4.15 3.02 6.77l3.48 2.53C7.27 7.92 9.44 6.2 12 6.2z"
+                fill="#EA4335" />
             </svg>
             <span id="googleBtnText">Sign in with Google</span>
           </button>
@@ -54,8 +61,16 @@
           <button id="adminBtn" class="bg-white text-indigo-600 px-3 py-2 rounded-lg shadow"
             onclick="window.location.href='admin.html'">Admin</button>
 
+          <button onclick="document.getElementById('rulesModal').classList.remove('hidden')"
+            class="p-2 rounded-lg bg-white text-indigo-600 shadow hover:bg-gray-100" title="Rules & Instructions">
+            ℹ️
+          </button>
+
+
           <div id="userPreview" class="hidden items-center gap-3 bg-white/10 px-3 py-1 rounded-lg">
-            <div id="avatar" class="w-9 h-9 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-semibold"></div>
+            <div id="avatar"
+              class="w-9 h-9 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-semibold">
+            </div>
             <div class="text-sm" id="userNameDisp"></div>
             <button id="logoutBtn" class="ml-2 text-sm bg-white text-indigo-600 px-2 py-1 rounded">Logout</button>
           </div>
@@ -134,7 +149,8 @@
               <input id="name" class="w-full border rounded px-2 py-1 mb-2" placeholder="e.g. Black Wallet" required />
 
               <label class="text-sm">Description</label>
-              <textarea id="description" class="w-full border rounded px-2 py-1 mb-2" rows="3" placeholder="Short description..." required></textarea>
+              <textarea id="description" class="w-full border rounded px-2 py-1 mb-2" rows="3"
+                placeholder="Short description..." required></textarea>
 
               <label class="text-sm">Place</label>
               <input id="place" class="w-full border rounded px-2 py-1 mb-2" placeholder="e.g. Library" required />
@@ -145,17 +161,12 @@
               <div class="flex gap-2 items-center">
                 <button type="submit" class="btn-primary flex-1">Submit</button>
 
-              <!-- Upload Image Button + Preview -->
-<div class="flex flex-col gap-2 mt-2">
-  
-  <input 
-    type="file" 
-    id="itemImage" 
-    accept="image/*" 
-    class="hidden"
-  >
+                <!-- Upload Image Button + Preview -->
+                <div class="flex flex-col gap-2 mt-2">
 
-  <!-- <button 
+                  <input type="file" id="itemImage" accept="image/*" class="hidden">
+
+                  <!-- <button 
     type="button" 
     id="imageBtn"
     class="btn-ghost w-fit"
@@ -163,11 +174,11 @@
     Upload Image
   </button>
     Image Preview Box -->
-  <!-- <img id="imagePreview" class="hidden w-32 h-32 object-cover rounded border" /> --> 
+                  <!-- <img id="imagePreview" class="hidden w-32 h-32 object-cover rounded border" /> -->
 
-</div>
+                </div>
 
- 
+
 
               </div>
             </form>
@@ -197,48 +208,59 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Claim Verification Modal -->
-<div id="claimModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[1001]">
+  <div id="claimModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[1001]">
     <div class="bg-white rounded-lg p-6 w-11/12 md:w-1/3 shadow-2xl transform transition-all duration-300 scale-100">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold text-indigo-600">Verify Ownership to Claim</h3>
-            <button id="closeClaimModal" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-indigo-600">Verify Ownership to Claim</h3>
+        <button id="closeClaimModal" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+      </div>
+      <p class="text-sm mb-4 text-gray-600">
+        Please answer the following unique questions about the item. Your answers will be sent to the finder for
+        verification.
+      </p>
+
+      <form id="claimForm" autocomplete="off">
+        <input type="hidden" id="reportIdToClaim">
+        <input type="hidden" id="finderUidToClaim">
+
+        <div class="space-y-4">
+          <div class="form-group">
+            <label for="verificationColor" class="text-sm font-medium text-gray-700 block mb-1">1. What was the
+              **primary color** of the item?</label>
+            <input type="text" id="verificationColor"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label for="verificationMarking" class="text-sm font-medium text-gray-700 block mb-1">2. What is the
+              **unique mark or inscription** (if any)?</label>
+            <input type="text" id="verificationMarking"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="e.g. 'J.D.' written inside" required>
+          </div>
+
+          <div class="form-group">
+            <label for="verificationContents" class="text-sm font-medium text-gray-700 block mb-1">3. What was
+              **inside** the item, or its last known setting?</label>
+            <input type="text" id="verificationContents"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="e.g. 3 IDs, a $5 bill, screen wallpaper" required>
+          </div>
         </div>
-        <p class="text-sm mb-4 text-gray-600">
-            Please answer the following unique questions about the item. Your answers will be sent to the finder for verification.
-        </p>
 
-        <form id="claimForm" autocomplete="off">
-            <input type="hidden" id="reportIdToClaim">
-            <input type="hidden" id="finderUidToClaim">
-
-            <div class="space-y-4">
-                <div class="form-group">
-                    <label for="verificationColor" class="text-sm font-medium text-gray-700 block mb-1">1. What was the **primary color** of the item?</label>
-                    <input type="text" id="verificationColor" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="verificationMarking" class="text-sm font-medium text-gray-700 block mb-1">2. What is the **unique mark or inscription** (if any)?</label>
-                    <input type="text" id="verificationMarking" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. 'J.D.' written inside" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="verificationContents" class="text-sm font-medium text-gray-700 block mb-1">3. What was **inside** the item, or its last known setting?</label>
-                    <input type="text" id="verificationContents" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g. 3 IDs, a $5 bill, screen wallpaper" required>
-                </div>
-            </div>
-            
-            <div class="mt-6">
-                <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition duration-150">
-                    Submit Verification Details
-                </button>
-            </div>
-            <p id="claimMessage" class="text-center mt-3 text-sm font-medium"></p>
-        </form>
+        <div class="mt-6">
+          <button type="submit"
+            class="w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition duration-150">
+            Submit Verification Details
+          </button>
+        </div>
+        <p id="claimMessage" class="text-center mt-3 text-sm font-medium"></p>
+      </form>
     </div>
-</div>
+  </div>
   <!-- FIREBASE SETUP -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -298,5 +320,70 @@
 
   <script src="script.js"></script>
 
+  <!-- Rules & Instructions Modal -->
+  <div id="rulesModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-[2000]">
+    <div class="bg-white p-6 rounded-xl w-11/12 md:w-2/3 lg:w-1/2 shadow-xl max-h-[80vh] overflow-y-auto">
+
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-indigo-600">Rules & Instructions</h2>
+        <button onclick="document.getElementById('rulesModal').classList.add('hidden')"
+          class="text-gray-500 text-2xl leading-none">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-sm text-gray-700 leading-relaxed">
+
+        <div>
+          <h3 class="font-semibold text-indigo-600 mb-1">General Rules</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>This system is only for campus lost & found items.</li>
+            <li>Users must sign in with Google — <span class="font-semibold">For accurate identity validation, only college email IDs are accepted.</span></li>
+            <li>False or misleading reports may result in access restrictions.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-indigo-600 mb-1">If You Lost an Item</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Submit a Lost Report with accurate details.</li>
+            <li>If a Found Report exists, you must verify ownership.</li>
+            <li>Answer verification questions honestly for smooth approval.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-indigo-600 mb-1">If You Found an Item</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Submit a Found Report with correct details.</li>
+            <li>Review the claimant’s verification answers.</li>
+            <li>Provide clear and accurate information to help confirm ownership.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-indigo-600 mb-1">Claiming an Item</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>You must answer 3 verification questions to prove ownership.</li>
+            <li>You cannot claim items that you reported yourself.</li>
+            <li>Claims stay Pending Verification until reviewed by admin.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="font-semibold text-indigo-600 mb-1">Admin Handover Process</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Admin compares verification answers from both sides.</li>
+            <li>If matched, the item is marked as Verified (Awaiting Pickup).</li>
+            <li>Admin personally hands over the item to the owner.</li>
+            <li>After physical handover, the item is marked Resolved.</li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
 </body>
+
 </html>
