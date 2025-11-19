@@ -105,5 +105,34 @@
   <!-- MAIN APP LOGIC -->
   <script type="module" src="script.js"></script>
 
+  <!-- ====================== CLAIM FORM MODAL ====================== -->
+<div id="claimModal"
+  class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-lg p-5 w-full max-w-lg">
+    <h3 class="text-lg font-semibold mb-3">Claim Verification</h3>
+
+    <form id="claimForm" class="space-y-3">
+      <input type="hidden" id="claimReportId">
+
+      <label class="text-sm">Where did you lose it?</label>
+      <input id="c_where" class="w-full border px-2 py-1 rounded" required>
+
+      <label class="text-sm">When did you lose it?</label>
+      <input type="date" id="c_when" class="w-full border px-2 py-1 rounded" required>
+
+      <label class="text-sm">Special marks / unique details</label>
+      <textarea id="c_details" rows="3" class="w-full border px-2 py-1 rounded" required></textarea>
+
+      <label class="text-sm">Upload proof (optional)</label>
+      <input type="file" id="c_proof" accept="image/*" class="border px-2 py-1 rounded w-full">
+
+      <div class="text-right mt-3">
+        <button type="button" id="claimCancel" class="btn-ghost mr-2">Cancel</button>
+        <button type="submit" class="btn-primary">Submit Claim</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 </body>
 </html>
