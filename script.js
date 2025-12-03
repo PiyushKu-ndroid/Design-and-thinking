@@ -138,7 +138,7 @@ function setupUserPage() {
       googleSignBtn.classList.remove("hidden");
       userPreview.classList.add("hidden");
     }
-
+    loadResolvedItems();
     renderRecent();
     loadMyReports();
   });
@@ -226,6 +226,8 @@ function setupUserPage() {
     resolvedCountEl.textContent = all.filter(x => x.claimed).length;
 
     let list = [...all];
+    list = list.filter(x => !x.resolved);  // HIDE RESOLVED ITEMS
+
     
     const f = filterEl?.value || "All";
     const q = (searchEl?.value || "").toLowerCase();
@@ -245,11 +247,31 @@ function setupUserPage() {
       div.className = "p-3 bg-white rounded shadow";
 
       // Determine button status and text based on 'claimed' or 'status'
-      const isDisabled = r.claimed || r.status === 'Pending Verification';
-      const buttonText = r.claimed 
-          ? "Claimed" 
-          : (r.status === 'Pending Verification' ? "Pending" : "Claim");
-      const buttonColor = r.status === 'Pending Verification' ? 'bg-yellow-500' : 'bg-indigo-500';
+      let buttonText = "";
+let buttonColor = "";
+let isDisabled = false;
+
+if (r.resolved) {
+    buttonText = "Resolved";
+    buttonColor = "bg-green-600";
+    isDisabled = true;
+}
+else if (r.status === "Pending Verification") {
+    buttonText = "Pending";
+    buttonColor = "bg-yellow-500";
+    isDisabled = true;
+}
+else if (r.claimed) {
+    buttonText = "Claimed";
+    buttonColor = "bg-blue-500";
+    isDisabled = true;
+}
+else {
+    buttonText = "Claim";
+    buttonColor = "bg-indigo-500";
+    isDisabled = false;
+}
+
 
       div.innerHTML = `
         <p class="text-xs text-gray-400">${escapeHtml(r.date)}</p>
@@ -269,7 +291,8 @@ function setupUserPage() {
 
       recentList.appendChild(div);
     });
-    
+    loadResolvedItems();
+
     // *** REMOVED OBSOLETE document.querySelectorAll(".claimBtn") listener ***
   }
 
@@ -317,6 +340,36 @@ function setupUserPage() {
       list.appendChild(div);
     });
   }
+
+  async function loadResolvedItems() {
+    const resolvedContainer = document.getElementById("resolvedItemsContainer");
+    const snap = await window.getDocs(window.collection(window.db, "reports"));
+
+    resolvedContainer.innerHTML = "";
+
+    snap.forEach(d => {
+        const r = d.data();
+
+        if (!r.resolved) return; // show only resolved items
+
+        const div = document.createElement("div");
+        div.className = "p-3 bg-gray-100 rounded border";
+
+        div.innerHTML = `
+            <p class="text-xs text-gray-400">${escapeHtml(r.date)}</p>
+            <p class="font-semibold">${escapeHtml(r.type)}: ${escapeHtml(r.name)}</p>
+            <p>${escapeHtml(r.description)}</p>
+            ${r.imageURL ? `<img src="${r.imageURL}" class="w-24 mt-2 rounded border" />` : ""}
+            <p class="text-sm text-gray-500">📍 ${escapeHtml(r.place)}</p>
+            <p class="text-green-600 font-semibold mt-1">✔ Resolved</p>
+        `;
+
+        resolvedContainer.appendChild(div);
+    });
+    loadResolvedItems();
+
+}
+
 }
 
 // --- NEW CLAIM VERIFICATION LOGIC (Kept outside for global access by onclick) ---
@@ -447,6 +500,29 @@ function setupAdminPage() {
     arr.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
 
     const q = adminSearch.value.toLowerCase();
+
+    // --- AUTOMATED MATCHING LOGIC --- //
+const lostItems = arr.filter(x => x.type === "Lost");
+const foundItems = arr.filter(x => x.type === "Found");
+
+arr.forEach(item => {
+  if (item.type === "Lost") {
+    const matches = foundItems
+      .map(f => ({
+        id: f.id,
+        name: f.name,
+        place: f.place,
+        score: matchScore(item, f)
+      }))
+      .filter(x => x.score >= 30) // only show clear matches
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 1); // top 3 matches
+
+    item.matches = matches;
+  }
+});
+
+
     const list = q
       ? arr.filter(r =>
         r.name.toLowerCase().includes(q) ||
@@ -516,6 +592,20 @@ else {
 
     ${statusInfo}
 
+    ${r.type === "Lost" && r.matches && r.matches.length > 0 ? `
+  <div class="mt-2">
+    <p class="font-semibold text-indigo-600">🔎 Suggested Matches:</p>
+    ${r.matches.map(m => `
+      <p class="text-sm text-gray-700">
+        Found: <strong>${escapeHtml(m.name)}</strong> 
+        (${escapeHtml(m.place)}) — 
+        <span class="text-indigo-600 font-bold">${m.score}%</span>
+      </p>
+    `).join("")}
+  </div>
+` : ""}
+
+
     ${r.claimerEmail ? `<p class="text-xs text-indigo-600 mt-1">📩 Claimed by: ${escapeHtml(r.claimerEmail)}</p>` : ""}
   </div>
 
@@ -572,4 +662,37 @@ else {
   function setAdminLoggedIn() {
     localStorage.setItem("adminLoggedIn", "true");
   }
+
+  function matchScore(lost, found) {
+  let score = 0;
+
+  // name similarity
+  const nameMatch = keywordMatch(lost.name, found.name);   // returns 0–1
+  score += Math.floor(nameMatch * 40);
+
+  // description similarity
+  const descMatch = keywordMatch(lost.description, found.description);
+  score += Math.floor(descMatch * 30);
+
+  // place similarity
+  if (lost.place.toLowerCase() === found.place.toLowerCase()) {
+    score += 20;
+  }
+
+  // date proximity (within 2 days)
+  const dateDiff = Math.abs(new Date(lost.date) - new Date(found.date)) / (1000 * 60 * 60 * 24);
+  if (dateDiff <= 2) score += 10;
+
+  return score; // returns a score from 0–100
+}
+
+function keywordMatch(a, b) {
+  if (!a || !b) return 0;
+  let A = a.toLowerCase().split(" ");
+  let B = b.toLowerCase().split(" ");
+  let match = A.filter(word => B.includes(word)).length;
+  return match / A.length;
+}
+
+
 }
