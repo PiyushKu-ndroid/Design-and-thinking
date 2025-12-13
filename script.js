@@ -418,52 +418,74 @@ if (auth.currentUser.uid === finderUid && itemType === "Found") {
  * Submits the verification details to Firebase.
  */
 async function submitClaimVerification(claimDetails) {
-    // Safely get element
-    const claimMessage = document.getElementById('claimMessage'); 
-    const reportId = claimDetails.reportId;
-    
-    // Using global variables exposed in index.html module script
-    const reportRef = window.doc(window.db, "reports", reportId); 
-    const auth = window.auth;
+  const claimMessage = document.getElementById("claimMessage");
+  const auth = window.auth;
 
-    claimMessage.textContent = 'Submitting verification...';
-    claimMessage.style.color = '#4f46e5'; // Indigo
+  if (!auth.currentUser) {
+    alert("Login required");
+    return;
+  }
 
-    try {
-        // Update the Firebase document (SUCCESSFUL STEP)
-        await window.updateDoc(reportRef, {
-            status: "Pending Verification",
-            claimerUid: auth.currentUser.uid,
-            claimerName: auth.currentUser.displayName,
-            claimerEmail: auth.currentUser.email,
-            verificationAnswers: {
-                color: claimDetails.color,
-                marking: claimDetails.marking,
-                contents: claimDetails.contents,
-            },
-            claimTimestamp: new Date(),
-        });
+  claimMessage.textContent = "Submitting verification...";
+  claimMessage.style.color = "#4f46e5";
 
-        claimMessage.textContent = '✅ Claim details submitted! The finder has been notified.';
-        claimMessage.style.color = '#10b981'; // Green
+  try {
+    // 1️⃣ Get the FOUND report
+    const reportRef = window.doc(window.db, "reports", claimDetails.reportId);
+    const reportSnap = await window.getDoc(reportRef);
 
-        // Optionally, close the modal after a delay
-        setTimeout(() => {
-            // ⭐ CRITICAL FIX APPLIED HERE: Use optional chaining on the modal element.
-            const modal = document.getElementById('claimModal');
-            modal?.classList.remove('flex');
-            modal?.classList.add('hidden');
-            
-            // Note: Since renderRecent is scoped, you'd need a more complex solution to trigger a re-render
-            // from this global function, but for now, the primary crash is fixed.
-        }, 3000);
-
-    } catch (error) {
-        console.error("Error submitting claim verification:", error);
-        claimMessage.textContent = `❌ Submission failed: ${error.message}`;
-        claimMessage.style.color = '#ef4444'; // Red
+    if (!reportSnap.exists()) {
+      throw new Error("Report not found");
     }
+
+    const foundItem = reportSnap.data();
+
+    // 2️⃣ Create VIRTUAL LOST (NOT SAVED)
+    const virtualLost = {
+      type: "Lost",
+      name: foundItem.name,
+      description: `
+        ${claimDetails.color}
+        ${claimDetails.marking}
+        ${claimDetails.contents}
+      `,
+      place: foundItem.place,
+      date: new Date().toISOString()
+    };
+
+    // 3️⃣ Calculate match %
+    const matchPercentage = matchScore(virtualLost, foundItem);
+
+    // 4️⃣ Update FOUND report only
+    await window.updateDoc(reportRef, {
+      status: "Pending Verification",
+      claimerUid: auth.currentUser.uid,
+      claimerName: auth.currentUser.displayName,
+      claimerEmail: auth.currentUser.email,
+      verificationAnswers: {
+        color: claimDetails.color,
+        marking: claimDetails.marking,
+        contents: claimDetails.contents
+      },
+      claimMatchPercentage: matchPercentage,
+      claimTimestamp: new Date()
+    });
+
+    claimMessage.textContent =
+      `✅ Claim submitted • Match confidence: ${matchPercentage}%`;
+    claimMessage.style.color = "#10b981";
+
+    setTimeout(() => {
+      document.getElementById("claimModal")?.classList.add("hidden");
+    }, 2000);
+
+  } catch (err) {
+    console.error(err);
+    claimMessage.textContent = "❌ " + err.message;
+    claimMessage.style.color = "#ef4444";
+  }
 }
+
 // --- END NEW CLAIM VERIFICATION LOGIC ---
 
 // ==================================================================
@@ -551,6 +573,13 @@ arr.forEach(item => {
         <p class="text-xs italic text-gray-500">Color: ${escapeHtml(r.verificationAnswers?.color || 'N/A')}</p>
         <p class="text-xs italic text-gray-500">Marking: ${escapeHtml(r.verificationAnswers?.marking || 'N/A')}</p>
         <p class="text-xs italic text-gray-500">Contents: ${escapeHtml(r.verificationAnswers?.contents || 'N/A')}</p>
+
+        ${r.claimMatchPercentage !== undefined
+  ? `<p class="text-xs text-indigo-600 font-semibold mt-1">
+       🔍 Claim Match: ${r.claimMatchPercentage}%
+     </p>`
+  : ""}
+
     `;
 }
 else if (r.status === "Verified" && !r.resolved) {
@@ -663,36 +692,42 @@ else {
     localStorage.setItem("adminLoggedIn", "true");
   }
 
-  function matchScore(lost, found) {
+ 
+
+
+}
+// ================= GLOBAL MATCHING LOGIC =================
+
+function matchScore(lost, found) {
   let score = 0;
 
-  // name similarity
-  const nameMatch = keywordMatch(lost.name, found.name);   // returns 0–1
+  const nameMatch = keywordMatch(lost.name, found.name);
   score += Math.floor(nameMatch * 40);
 
-  // description similarity
   const descMatch = keywordMatch(lost.description, found.description);
   score += Math.floor(descMatch * 30);
 
-  // place similarity
-  if (lost.place.toLowerCase() === found.place.toLowerCase()) {
+  if (
+    lost.place &&
+    found.place &&
+    lost.place.toLowerCase() === found.place.toLowerCase()
+  ) {
     score += 20;
   }
 
-  // date proximity (within 2 days)
-  const dateDiff = Math.abs(new Date(lost.date) - new Date(found.date)) / (1000 * 60 * 60 * 24);
+  const dateDiff = Math.abs(
+    new Date(lost.date) - new Date(found.date)
+  ) / (1000 * 60 * 60 * 24);
+
   if (dateDiff <= 2) score += 10;
 
-  return score; // returns a score from 0–100
+  return score;
 }
 
 function keywordMatch(a, b) {
   if (!a || !b) return 0;
-  let A = a.toLowerCase().split(" ");
-  let B = b.toLowerCase().split(" ");
-  let match = A.filter(word => B.includes(word)).length;
-  return match / A.length;
-}
-
-
+  const A = a.toLowerCase().split(/\s+/);
+  const B = b.toLowerCase().split(/\s+/);
+  const matches = A.filter(word => B.includes(word)).length;
+  return matches / A.length;
 }
