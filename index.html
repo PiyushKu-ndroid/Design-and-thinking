@@ -274,7 +274,7 @@
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     import {
-      getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc, query, where
+      getFirestore, collection, addDoc, getDocs, getDoc, updateDoc, deleteDoc, doc, query, where
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     import {
@@ -316,6 +316,8 @@
     window.doc = doc;
     window.query = query;
     window.where = where;
+    window.getDoc = getDoc;
+
 
     window.storageRef = ref;
     window.uploadBytes = uploadBytes;
