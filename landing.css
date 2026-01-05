@@ -1,0 +1,159 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #f9fafb;
+  color: #333;
+}
+
+/* ================= TOP BAR ================= */
+.topbar {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.topbar-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 30px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.navlinks {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.navlinks a {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+}
+
+.navlinks a:hover {
+  color: #4f46e5;
+}
+
+.signin {
+  border: 2px solid #4f46e5;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #4f46e5;
+}
+
+.signin:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+/* ================= HERO ================= */
+.hero {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  text-align: center;
+  padding: 120px 20px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  max-width: 600px;
+  margin: auto;
+  margin-bottom: 30px;
+  font-size: 18px;
+  opacity: 0.95;
+}
+
+.start {
+  display: inline-block;
+  background: #ff6f61;
+  padding: 14px 32px;
+  border-radius: 30px;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.start:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+/* ================= PREVIEW ================= */
+.preview {
+  padding: 80px 20px;
+  background: white;
+  text-align: center;
+}
+
+.preview h2 {
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.card {
+  background: #f9fafb;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  color: #4f46e5;
+}
+
+/* ================= ABOUT ================= */
+.about {
+  padding: 80px 20px;
+  text-align: center;
+  background: #f3f4f6;
+}
+
+.about h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.about p {
+  max-width: 700px;
+  margin: auto;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ================= FOOTER ================= */
+.footer {
+  background: #111827;
+  color: #d1d5db;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}
